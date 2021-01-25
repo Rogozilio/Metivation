@@ -57,7 +57,6 @@ public class Control : MonoBehaviour
     private void FixedUpdate()
     {
         PCMove();
-        //CheckScreenBoundaries();
     }
     private void Move(Touch touch)
     {
@@ -96,19 +95,5 @@ public class Control : MonoBehaviour
     {
         _rigidBody.velocity
             = new Vector2(_speed * Input.GetAxis("Horizontal"), _speed * Input.GetAxis("Vertical"));
-    }
-    private void CheckScreenBoundaries()
-    {
-        Vector3 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector3 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-
-        if (transform.position.x + _colider.bounds.size.x/2 > max.x || transform.position.x - _colider.bounds.size.x/2 < min.x)
-        {
-            _rigidBody.velocity = new Vector2(0, _rigidBody.velocity.y);
-        }
-        if (transform.position.y > max.y || transform.position.y < min.y)
-        {
-            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, 0);
-        }
     }
 }

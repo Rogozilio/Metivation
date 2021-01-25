@@ -8,7 +8,7 @@ public class ScreenCollider : MonoBehaviour
     private Vector2[]       _edgeScreen;
     void Start()
     {
-        transform.position  = Vector3.zero;
+        transform.position = new Vector3(0, 0, transform.position.z);
         Vector2 minXY       = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 minXmaxY    = Camera.main.ViewportToWorldPoint(new Vector2(0, 1));
         Vector2 maxXminY    = Camera.main.ViewportToWorldPoint(new Vector2(1, 0));
