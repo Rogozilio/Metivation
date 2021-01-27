@@ -5,7 +5,6 @@ public class Control : MonoBehaviour
 {
     private Rigidbody2D     _rigidBody;
     private SpriteRenderer  _sprControl;
-    private Collider2D      _colider;
 
     private Vector2         _startPos;
     private Vector2         _pos;
@@ -15,6 +14,7 @@ public class Control : MonoBehaviour
     [SerializeField]
     [Range(1, 10)]
     private float           _speed;
+    private bool            _isControl;
 
     private Log             _log;
     public Vector2 Pos { get { return _pos; } }
@@ -22,14 +22,14 @@ public class Control : MonoBehaviour
 
     void Start()
     {
+        _isControl  = true;
         _edgePos    = 30f;
-        _speed      = 3.3f;
+        _speed      = 2.8f;
         _startPos   = Vector2.zero;
         _pos        = Vector2.zero;
         _log        = FindObjectOfType<Text>().GetComponent<Log>();
         _rigidBody  = GetComponent<Rigidbody2D>();
         _sprControl = GetComponentInChildren<SpriteRenderer>();
-        _colider    = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -93,7 +93,29 @@ public class Control : MonoBehaviour
     }
     private void PCMove()
     {
-        _rigidBody.velocity
-            = new Vector2(_speed * Input.GetAxis("Horizontal"), _speed * Input.GetAxis("Vertical"));
+        if(_isControl)
+        {
+            _rigidBody.velocity
+                = new Vector2(_speed * Input.GetAxis("Horizontal"),
+                              _speed * Input.GetAxis("Vertical"));
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        _isControl = false;
+        _rigidBody.velocity = Vector2.zero;
+    }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        transform.position 
+            = Vector2.MoveTowards(transform.position, other.transform.position, _speed * Time.deltaTime);
+        if(transform.position == other.transform.position)
+        {
+            Destroy(other.gameObject);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        _isControl = true;
     }
 }
