@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Control : MonoBehaviour
+public class Me : MonoBehaviour
 {
     private Rigidbody2D     _rigidBody;
     private SpriteRenderer  _sprControl;
@@ -12,7 +12,7 @@ public class Control : MonoBehaviour
     [Range(10, 50)]
     private float           _edgePos;
     [SerializeField]
-    [Range(1, 10)]
+    [Range(50, 100)]
     private float           _speed;
     private bool            _isControl;
 
@@ -22,18 +22,26 @@ public class Control : MonoBehaviour
 
     void Start()
     {
+        transform.localScale = new Vector2(40, 40);
         _isControl  = true;
         _edgePos    = 30f;
-        _speed      = 2.8f;
+        _speed      = 90f;
         _startPos   = Vector2.zero;
         _pos        = Vector2.zero;
         _log        = FindObjectOfType<Text>().GetComponent<Log>();
         _rigidBody  = GetComponent<Rigidbody2D>();
         _sprControl = GetComponentInChildren<SpriteRenderer>();
     }
-
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
+    {
+        Control();
+    }
+    private void Control()
+    {
+        PCMove();
+        SensoreMove();
+    }
+    private void SensoreMove()
     {
         if (Input.touchCount == 1)
         {
@@ -53,10 +61,6 @@ public class Control : MonoBehaviour
             }
         }
         _log.Control(this);
-    }
-    private void FixedUpdate()
-    {
-        PCMove();
     }
     private void Move(Touch touch)
     {
@@ -112,6 +116,7 @@ public class Control : MonoBehaviour
         if(transform.position == other.transform.position)
         {
             Destroy(other.gameObject);
+            Destroy(gameObject);
         }
     }
     private void OnTriggerExit2D(Collider2D other)
